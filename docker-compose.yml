@@ -1,3 +1,7 @@
+#1. Set APP_ENV environment variable: export APP_ENV=development
+#2. Run: docker-compose build
+#3. Run: docker-compose up -d
+
 version: "2"
 
 services:
@@ -5,7 +9,7 @@ services:
         container_name: mysql_database
         image: mysql:5.6
         env_file:
-            - ./docker/env/mysql.development.env
+            - ./docker/env/mysql.${APP_ENV}.env
         ports:
             - "3306:3306"
         networks:
@@ -18,10 +22,13 @@ services:
         ports:
             - "80:3000"
         env_file:
-            - ./docker/env/nodejs.development.env
+            - ./docker/env/nodejs.${APP_ENV}.env
+            - ./docker/env/mysql.${APP_ENV}.env
         networks:
             - meetcentrale-network
         depends_on:
+            - database
+        links:
             - database
 
 networks:
