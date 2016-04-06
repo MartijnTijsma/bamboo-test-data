@@ -6,7 +6,7 @@ version: "2"
 
 services:
     database:
-        container_name: mysql_database
+        container_name: meetcentrale_database
         image: mysql:5.6
         env_file:
             - ./docker/env/mysql.${APP_ENV}.env
@@ -14,8 +14,11 @@ services:
             - "3306:3306"
         networks:
             - meetcentrale-network
+        #volumes:
+            #- ./docker/data:/docker-entrypoint-initdb.d
+
     node-tester:
-        container_name: node-tester1
+        container_name: database-tester1
         build:
             context: .
             dockerfile: docker/node.dockerfile
@@ -30,7 +33,6 @@ services:
             - database
         links:
             - database
-
 networks:
     meetcentrale-network:
         driver: bridge
